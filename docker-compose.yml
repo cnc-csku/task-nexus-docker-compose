@@ -13,6 +13,21 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
       MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
 
+  minio:
+    image: minio/minio:latest
+    ports:
+      - ${MINIO_API_PORT}:9000  # API Port
+      - ${MINIO_WEB_UI_PORT}:9001  # Web UI Port
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USERNAME}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    command: server /data --console-address ":${MINIO_WEB_UI_PORT}"
+    networks:
+      - task-nexus-network
+    restart: on-failure
+    volumes:
+      - task-nexus-minio-vol:/data
+
   redis:
     image: redis:7.4.2-alpine
     restart: on-failure
@@ -33,6 +48,8 @@ volumes:
   task-nexus-redis-vol:
     driver: local
   task-nexus-redis-config-vol:
+    driver: local
+  task-nexus-minio-vol:
     driver: local
 
 networks:
