@@ -15,7 +15,6 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: minio-server
     ports:
       - ${MINIO_API_PORT}:9000  # API Port
       - ${MINIO_WEB_UI_PORT}:9001  # Web UI Port
